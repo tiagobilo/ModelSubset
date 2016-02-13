@@ -99,6 +99,7 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 
 		e.g., [initial_time,final_time] or [initial_time,final_time]
 
+		IMPORTANT: FOR MONTHLY DATA THE TIME RANGE MUST BE MAXIMUM OF 4 YEARS
 
 	Returns
 	-------
@@ -160,7 +161,7 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 	if varnames[0] == 'SALT' or varnames[0] == 'THETA' or varnames[0] == 'UVEL'  or varnames[0] == 'VVEL'  or varnames[0] == 'WVEL':
 		start  = datetime.datetime.strptime(timerange[0], "%Y%m%d")
 		end  = datetime.datetime.strptime(timerange[1], "%Y%m%d")
-		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days,3)]
+		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days+3,3)]
 
 		for t in xrange(len(time)):
 			time[t] = time[t].strftime('%Y%m%d')
@@ -173,7 +174,7 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 	elif varnames[0] == 'SALT_monthly' or varnames[0] == 'THETA_monthly' or varnames[0] == 'UVEL_monthly' or varnames[0] == 'VVEL_monthly'  or varnames[0] == 'WVEL_monthly':
 		start  = datetime.datetime.strptime(timerange[0], "%Y%m")
 		end  = datetime.datetime.strptime(timerange[1], "%Y%m")
-		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days,30)]
+		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days+31,31)]
 
 		for t in xrange(len(time)):
 			time[t] = time[t].strftime('%Y%m')
@@ -201,7 +202,7 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 	else:
 		start  = datetime.datetime.strptime(timerange[0], "%Y%m%d")
 		end  = datetime.datetime.strptime(timerange[1], "%Y%m%d")
-		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days,1)]
+		time = [start + datetime.timedelta(days=t) for t in xrange(0, (end-start).days+1,1)]
 
 		for t in xrange(len(time)):
 			time[t] = time[t].strftime('%Y%m%d')
