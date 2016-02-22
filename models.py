@@ -4,7 +4,24 @@ class class_builder(object):
 		for i in xrange(len(var)):
 
 			exec("self."+varnames[i]+" = var[i]")
-			self.varnames = varnames
+			
+		self.varnames = varnames
+
+
+class load_netcdf(object):
+	def __init__(self,filename):
+
+		from netCDF4 import Dataset 
+
+		data = Dataset(filename,'r')
+		varnames = data.variables.keys()
+
+		for i in xrange(len(varnames)):
+
+			exec("self."+varnames[i]+" = data[varnames[i]][:]")
+
+
+		data.close()
 
 
 
