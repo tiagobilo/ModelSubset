@@ -1,0 +1,37 @@
+Last login: Tue Mar  1 13:29:35 on ttys001
+UM-929LG8WM:ECCO2 Tiago$ py
+Python 2.7.11 |Anaconda 2.3.0 (x86_64)| (default, Dec  6 2015, 18:57:58) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 3.2.0 -- An enhanced Interactive Python.
+Anaconda is brought to you by Continuum Analytics.
+Please check out: http://continuum.io/thanks and https://anaconda.org
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object', use 'object??' for extra details.
+
+In [1]: reset -f
+
+In [2]: 
+
+In [2]: 
+
+In [2]: run MTcorrection_field.py
+Load ecco2_v fields
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -322,130 +322,167 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 
 
 
-def OFES(varnames,latrange,lonrange,timerange,product='OFES_NCEP_RUN/MONTHLY_3D/'):
+def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,product='ncep_0.1_global_3day',nz=1):
 	r"""
-	Download a subset from the EOGCM for the Earth Simulator, from the 
-	JAMSTEC OpenDap server 
+	Download and save a subset from the OGCM for the Earth Simulator, from JAMSTEC 
+	The data is accessed through the APDRC OpenDap server 
+	(http://apdrc.soest.hawaii.edu/dods/esc_only/OfES/) 
 
-	Please check the products and variables names in the http://www.jamstec.go.jp
-	website. Since this is a beta version I can not guarantee that it will work in 
-	all variables  
+	This version only will correctly retrieve the 3 days snapshots of the 0.1 degree resolution
+	experiments  
 
 	Parameters
 	----------
+	filename: char
+		name of the file containing the OFES output
+
 	varnames: list
 		names of the variables to retrieve e.g., ['var1','var2','var3']
 
 	latrange: list
-		latitudes of the northern and southern limits of the domain e. g., [90,-90]
+		latitudes of the southern and northern limits of the domain [j_south,j_north]
+		i. e., position of the array np.arange(LATmin,LATmax,0.1)
 
 	lonrange: list
-		longitudes of the eastern and western limits of the domain e. g., [0,360]	
+		longitude of the western and eastern  limits of the domain [i_east,i_west]
+		i. e., position of the array np.arange(LONmin,LONmax,0.1)	
 
 	timerange: list
 		time period of interest (yyyymmdd) e. g., [19920101,20100510]
 
+	nz: integer
+		number of z-levels to be retrieved from 3D variables
+
+	zrange: list
+		Z-levels of interested. IMPORTANT: THE CONNECTION WITH THE SERVER MIGHT BE INTERRUPTED WITH
+		IF YOU TRY TO RETRIEVE TOO MUCH DATA AT ONCE. THEREFORE IF YOU INTEND TO GET MORE THAN 10 
+		VERTICAL LEVELS CONSIDER DO THE FOLLOWING: 
+
+			e.g., zrange = [[0,10],[11,21],[22,32],[33,43],[44,53]] or zrange = [[0,10],[48,53]], or ... 
+
+		if z-levels < 15: e. g., zrange = [[0,4]]
 
 	Returns
 	-------
 	subset: class 
-		subset.lat; subset.lon; subset.time; subset.topo
-		subset.var1; subset.var2; subset.var3
-
+		subset.var1; subset.var2; subset.var3; subset.time (if applicable)
 	"""
-	from netCDF4 import Dataset, date2num 
+
+	from netCDF4 import Dataset, date2num, num2date 
 	import datetime 
 	import numpy as np 
 	import pylab as py
-	from dateutil.parser import parse
+
+	# URL 
+	url = 'http://'+user+':'+passw+'@apdrc.soest.hawaii.edu/dods/esc_only/OfES/'+product+'/'
 
 
-	path = 'http://www.jamstec.go.jp/esc/fes/dods/OFES/'
+	## Finding the time indexes
+	# 2d
+	start_2d  = datetime.datetime.strptime('19500101', "%Y%m%d")
+	start_2d = date2num(start_2d, 'days since 1-1-1 00:00:00')
 
-	# local depth (topography) and depth of the deepest layer
-	filename1 = 'TOPOG/ht' 
+	end_2d  = datetime.datetime.strptime('20131229', "%Y%m%d")
+	end_2d = date2num(end_2d, 'days since 1-1-1 00:00:00')
 
-	data1 = Dataset(path+filename1,'r')
-
-	longitude = data1.variables.pop('lon'); longitude = longitude[:].squeeze()
-	latitude  = data1.variables.pop('lat'); latitude = latitude[:].squeeze()
-
-	loni = lonrange[0]				
-	lonf = lonrange[-1]				
-
-	# Coordinates for topography
-	latgood1 = (latitude>=latrange[0]) & (latitude<=latrange[1])
-	longood1 = (longitude>=loni) & (longitude<=lonf)
+	# 2d time axis
+	time_2d = np.arange(start_2d,end_2d+3,3)
 
 
-	# Topography 
-	print "Retrieving model topography"
-	topo = data1.variables.pop('ht')
-	topo = topo[0,0,latgood1,:]; topo = topo[:,longood1]
-	data1.close()
+	# 3d
+	start_3d  = datetime.datetime.strptime('19800103', "%Y%m%d")
+	start_3d = date2num(start_3d, 'days since 1-1-1 00:00:00')
+
+	end_3d  = datetime.datetime.strptime('20131229', "%Y%m%d")
+	end_3d = date2num(end_3d, 'days since 1-1-1 00:00:00')
+
+	# 3d time axis
+	time_3d = np.arange(start_3d,end_3d+3,3)
 
 
+	# time range conversion
+	trange = [0,0] 
+	trange[0] = datetime.datetime.strptime(timerange[0], "%Y%m%d")
+	trange[-1] = datetime.datetime.strptime(timerange[-1], "%Y%m%d")
 
-	## Retrieving variables
-	# Time range 
-	tstart  = datetime.datetime.strptime(timerange[0], "%Y%m%d")
-	tend  = datetime.datetime.strptime(timerange[-1], "%Y%m%d")
-
-	tstart = date2num(tstart, 'days since 1-1-1 00:00:00')
-	tend = date2num(tend, 'days since 1-1-1 00:00:00')
+	trange[0] = date2num(trange[0], 'days since 1-1-1 00:00:00')
+	trange[-1] = date2num(trange[-1], 'days since 1-1-1 00:00:00')
 
 
+	# Indexes
+	t_2d = [py.find(time_2d >= trange[0])[0]]
+	t_2d.append(py.find(time_2d < trange[-1])[-1])
+
+	t_3d = [py.find(time_3d >= trange[0])[0]]
+	t_3d.append(py.find(time_3d < trange[-1])[-1])
+
+
+	# Initializing variables
 	var = []
-	for k in xrange(len(varnames)):
-		print 'Retrieving '+varnames[k]
 
-		filename = path+product+varnames[k]
-		data = Dataset(filename,'r')
+	# Retrieving the outputs
+	for varname in varnames:
+		VARNAMES = varname+' '
 
-		# Time 
-		if k == 0:
-			time = data.variables.pop('time'); time = time[:].squeeze()
-			pressure = data.variables.pop('lev'); pressure = pressure[:].squeeze()
+		if varname == u'eta' or varname == u'hflx' or varname == u'sflx' or varname == 'taux' or varname == 'tauy' or varname == 'convU' or varname == 'hblt' or varname == 'hmxl':
+			data  = Dataset(url+varname,'r')
+			var.append(data[varname][t_2d[0]:t_2d[-1]+1,0,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze())
+			data.close()
+		elif varname == u'ht' or varname == 'kmt':
+			data  = Dataset(url+varname,'r')
+			var.append(data[varname][0,0,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze())
+			data.close()
+		elif varname == 'salt':
+			for ZR in zrange:
+				data  = Dataset(url+varname,'r')
+				VAR = data['salinity'][t_3d[0]:t_3d[-1]+1,ZR[0]:ZR[-1]+1,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze() 
+				data.close()
 
-			latgg = data.variables.pop('lat'); longg = data.variables.pop('lon')
+				if ZR[0] == zrange[0][0]:
+					NVAR = np.ones((VAR.shape[0],nz,VAR.shape[2],VAR.shape[3]))*np.nan
+					z = np.ones(54)*np.nan
 
-			tgood = py.find((time >= tstart) & (time <= tend))
-			pgood = py.find(pressure<20000.)
-			latgood = py.find((latitude>=latrange[0]) & (latitude<=latrange[1]))
-			longood = py.find((longitude>=loni) & (longitude<=lonf))
 
-			time = time[(time >= tstart) & (time <= tend)]
+				NVAR[:,ZR[0]:ZR[-1]+1,:,:] = VAR.copy()
+				z[ZR[0]:ZR[-1]+1] = 1
+
+				del(VAR)
+
+			igood = ~np.isnan(z) 
+			var.append(NVAR[:,igood,:,:].copy())
+			del(NVAR)
+			del(z)
+			del(igood)
+
+			# var.append(data['salinity'][t_3d[0]:t_3d[-1]+1,zrange[0]:zrange[-1]+1,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze())
 		else:
-			latgg = data.variables.pop('lat'); longg = data.variables.pop('lon')
-			timeg = data.variables.pop('time'); 
-			pressureg = data.variables.pop('lev');
+			for ZR in zrange:
+				data  = Dataset(url+varname,'r')
+				VAR = data[varname][t_3d[0]:t_3d[-1]+1,ZR[0]:ZR[-1]+1,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze() 
+				data.close()
+
+				if ZR[0] == zrange[0][0]:
+					NVAR = np.ones((VAR.shape[0],nz,VAR.shape[2],VAR.shape[3]))*np.nan
+					z = np.ones(54)*np.nan
 
 
-		rvar = np.ones((tgood.shape[0],pgood.shape[0],latgood.shape[0],longood.shape[0]))*np.nan
-		rvar1 = data.variables.pop(varnames[k])
+				NVAR[:,ZR[0]:ZR[-1]+1,:,:] = VAR.copy()
+				z[ZR[0]:ZR[-1]+1] = 1
 
-		count = 0.
-		for j in xrange(longood.shape[0]):
-			for i in xrange(latgood.shape[0]):
-				rvar[:,:,i,j] = rvar1[tgood,:,latgood[i],longood[j]]
-				count+=1.
+				del(VAR)
 
+			igood = ~np.isnan(z) 
+			var.append(NVAR[:,igood,:,:].copy())
+			del(NVAR)
+			del(z)
+			del(igood)
 
-		if varnames[k] == 'temp':
-			varnames[k] = 'theta'
-		
-		var.append(rvar)
-		data.close()
+			# var.append(data[varname][t_3d[0]:t_3d[-1]+1,zrange[0]:zrange[-1]+1,latrange[0]:latrange[-1]+1,lonrange[0]:lonrange[-1]+1].squeeze())
 
-
-	lat = latitude[(latitude>=latrange[0]) & (latitude<=latrange[1])]
-	lon = longitude[(longitude>=loni) & (longitude<=lonf)]
-
-
-	var.append(time); var.append(lat); var.append(lon); var.append(topo); var.append(pressure)
-	varnames.append('time'); varnames.append('lat'); varnames.append('lon'); varnames.append('topo'); varnames.append('pressure')
-
+	# Organize outputs in a class
 	subset = class_builder(var,varnames)
-	return subset
+
+	write_netcdf(filename,
+		subset.varnames,subset,'OFES '+VARNAMES+' from'+timerange[0]+' to '+timerange[-1])
 
 
