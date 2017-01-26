@@ -1,2 +1,3 @@
 # ModelSubset
-Download global model's outputs 
+Download subsets from ocean global model outputs
+(ECCO2 and OFES) 

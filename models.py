@@ -333,8 +333,11 @@ def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,product
 
 	Parameters
 	----------
-	filename: char
+	filename: str
 		name of the file containing the OFES output
+
+	user, passw: str
+		Username and password to access the OFES outputs from the APDRC server 
 
 	varnames: list
 		names of the variables to retrieve e.g., ['var1','var2','var3']
