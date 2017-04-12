@@ -322,7 +322,7 @@ def ECCO2(varnames,latrange,lonrange,timerange):
 
 
 
-def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,product='ncep_0.1_global_3day',nz=1):
+def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,server='restrict',product='ncep_0.1_global_3day',nz=1):
 	r"""
 	Download and save a subset from the OGCM for the Earth Simulator, from JAMSTEC 
 	The data is accessed through the APDRC OpenDap server 
@@ -337,7 +337,8 @@ def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,product
 		name of the file containing the OFES output
 
 	user, passw: str
-		Username and password to access the OFES outputs from the APDRC server 
+		Username and password to access the OFES outputs from the APDRC server. If you choose to retrieve the data from
+		the server='public' you can assign user = passw = ' '.  
 
 	varnames: list
 		names of the variables to retrieve e.g., ['var1','var2','var3']
@@ -376,8 +377,11 @@ def OFES(filename,user,passw,varnames,latrange,lonrange,zrange,timerange,product
 	import numpy as np 
 	import pylab as py
 
-	# URL 
-	url = 'http://'+user+':'+passw+'@apdrc.soest.hawaii.edu/dods/esc_only/OfES/'+product+'/'
+	# URL
+	if server == 'restrict':
+		url = 'http://'+user+':'+passw+'@apdrc.soest.hawaii.edu/dods/esc_only/OfES/'+product+'/'
+	else:
+		url = 'http://apdrc.soest.hawaii.edu/dods/public_ofes/OfES/'+product+'/'
 
 
 	## Finding the time indexes
