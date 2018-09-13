@@ -1,37 +1,258 @@
-Last login: Tue Mar  1 13:29:35 on ttys001
-UM-929LG8WM:ECCO2 Tiago$ py
-Python 2.7.11 |Anaconda 2.3.0 (x86_64)| (default, Dec  6 2015, 18:57:58) 
+Last login: Thu Aug 16 15:56:16 on ttys000
+UM-929LG8WM:ARGO_WOA Tiago$ ls
+ADTref_geostrophy.py           ARGO_psi.py                    UVref_geostrophy.py            build_YoMaHa_refv.py           mean_ertel_pv.py
+ARGO_isopycnalTS.py            ARGO_psi_old.py                argo_geostrophy.py             download_update_RGclim_ARGO.sh
+UM-929LG8WM:ARGO_WOA Tiago$ cd ~
+UM-929LG8WM:~ Tiago$ ssh tcb46@pegasus2.ccs.miami.edu
+tcb46@pegasus2.ccs.miami.edu's password: 
+Permission denied, please try again.
+tcb46@pegasus2.ccs.miami.edu's password: 
+Last login: Wed Aug 15 10:52:58 2018 from 129.171.113.55
+------------------------------------------------------------------------------
+                     Welcome to the Pegasus Supercomputer
+           Center for Computational Science, University of Miami 
+------------------------------------------------------------------------------
+
+              ** Unauthorized use/access is prohibited. **
+
+If you log on to this computer system, you acknowledge your awareness
+of and concurrence with the University Use Policy. The University will prosecute 
+violators to the full extent of the law.
+
+CCS AC Usage Policies: http://ccs.miami.edu/ac/policies 
+______________________________________________________________________________
+
+Questions and Problem Reports:
+
+-->  hpc@ccs.miami.edu
+
+If you are new to Pegasus and high-performance compute clusters, 
+start with our documentation and user guides.
+
+Documentation:  http://ccs.miami.edu/ac/docs
+Support & FAQ:  http://ccs.miami.edu/ac/support
+______________________________________________________________________________
+
+Welcome to Pegasus.  Before use, please read these important system notes:
+
+--> Pegasus is currently running the LSF resource manager to 
+    schedule all compute resources. 
+
+    See "man bsub" or the LSF user guide for more detailed information.
+         http://ccs.miami.edu/ac/lsf/9.1.1/
+         http://ccs.miami.edu/ac/docs/#lsfjobs
+
+--> You may compile and test jobs on login nodes.  However, any jobs exceeding
+    30 minutes of run time or using excessive resources on login nodes will be
+    terminated and user's account may be suspended.
+
+--> Pegasus has two parallel file systems available to users: 
+         /nethome (permanent, quota'd, not backed-up)
+         /scratch (high-speed *purged* storage)
+    *NO* backups are performed on Pegasus file systems
+   
+    Files on /scratch are subject to purging after 21 days
+   
+    See CCS AC Policies for more information
+         http://ccs.miami.edu/ac/policies
+
+--> To see which software packages are available, issue command: 
+         module avail
+
+    To load a module, issue command: 
+         module load <module name>
+
+    See "module help" or consult CCS AC Documentation & User Guides:
+         http://ccs.miami.edu/ac/docs
+
+
+--------------------------Disk Quota------------------------------
+filesystem | project    | used(GB)   | quota (GB) | Util(%)   
+============================================================
+nethome    | user       | 0.17       | 250.00     |    0%
+scratch    | mocha      | 0.91       | 5000.00    |    0%
+------------------------------------------------------------------
+     Files on /scratch are subject to purging after 21 days       
+------------------------------------------------------------------
+[tcb46@pegasus ~]$ ls
+fortran_programs  intel  matlab_programs  my_bashrc.txt  pegasus_info.txt  python_programs
+[tcb46@pegasus ~]$ ls
+fortran_programs  intel  matlab_programs  my_bashrc.txt  pegasus_info.txt  python_programs
+[tcb46@pegasus ~]$ cd python_programs/
+[tcb46@pegasus python_programs]$ ls
+argo  ARGO  ModelSubset  OFES
+[tcb46@pegasus python_programs]$ cd argo/
+[tcb46@pegasus argo]$ ls
+build_YoMaHa_refv
+[tcb46@pegasus argo]$ mkdir compute_psi
+[tcb46@pegasus argo]$ ls
+build_YoMaHa_refv  compute_psi
+[tcb46@pegasus argo]$ cd ../
+[tcb46@pegasus python_programs]$ ls
+argo  ARGO  ModelSubset  OFES
+[tcb46@pegasus python_programs]$ pwd
+/nethome/tcb46/python_programs
+[tcb46@pegasus python_programs]$ ls
+argo  ARGO  ModelSubset  OFES  STREAMFUNCTION
+[tcb46@pegasus python_programs]$ ls
+argo  ARGO  ModelSubset  OFES  STREAMFUNCTION
+[tcb46@pegasus python_programs]$ cd ../
+[tcb46@pegasus ~]$ ls
+fortran_programs  intel  matlab_programs  my_bashrc.txt  pegasus_info.txt  python_programs
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ 
+[tcb46@pegasus ~]$ vi .bashrc
+E576: viminfo: Missing '>' in line: 41
+E576: viminfo: Missing '>' in line: ^I^^I60^I42
+E576: viminfo: Missing '>' in line: ^I.^I69^I0
+E576: viminfo: Missing '>' in line: ^I+^I27^I0
+E576: viminfo: Missing '>' in line: ^I+^I1^I35
+E576: viminfo: Missing '>' in line: ^I+^I122^I38
+E576: viminfo: Missing '>' in line: ^I+^I17^I0
+E576: viminfo: Missing '>' in line: ^I+^I18^I0
+E576: viminfo: Missing '>' in line: ^I+^I19^I0
+E576: viminfo: Missing '>' in line: ^I+^I20^I26
+E136: viminfo: Too many errors, skipping rest of file
+Press ENTER or type command to continue
+[1]+  Stopped                 vim .bashrc
+[tcb46@pegasus ~]$ clear
+
+[tcb46@pegasus ~]$ ls
+[tcb46@pegasus ~]$ ls
+fortran_programs  intel  matlab_programs  my_bashrc.txt  pegasus_info.txt  python_programs
+[tcb46@pegasus ~]$ py
+Python 2.7.3 (default, Apr 24 2013, 14:25:43) 
 Type "copyright", "credits" or "license" for more information.
 
-IPython 3.2.0 -- An enhanced Interactive Python.
-Anaconda is brought to you by Continuum Analytics.
-Please check out: http://continuum.io/thanks and https://anaconda.org
+IPython 4.0.2 -- An enhanced Interactive Python.
 ?         -> Introduction and overview of IPython's features.
 %quickref -> Quick reference.
 help      -> Python's own help system.
 object?   -> Details about 'object', use 'object??' for extra details.
 
-In [1]: reset -f
+In [1]: import stre
+Caching the list of root modules, please wait!
+(This will only be done once - type '%rehashx' to reset cache!)
+
+
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+<ipython-input-1-49e30787084e> in <module>()
+----> 1 import str
+
+ImportError: No module named str
 
 In [2]: 
 
 In [2]: 
 
-In [2]: run MTcorrection_field.py
-Load ecco2_v fields
+In [2]: 
+
+In [2]: 
+
+In [2]: 
+
+In [2]: import streamfunction
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+<ipython-input-2-98f28921460a> in <module>()
+----> 1 import streamfunction
+
+ImportError: No module named streamfunction
+
+In [3]: 
+
+In [3]: 
+
+In [3]: exit
+[tcb46@pegasus ~]$ exit
+logout
+There are stopped jobs.
+[tcb46@pegasus ~]$ exit
+logout
+
+[1]+  Stopped                 vim ARGO_psi.py
+[tcb46@pegasus compute_psi]$ $scratch 
+-bash: /scratch/projects/mocha/tcb46: is a directory
+[tcb46@pegasus compute_psi]$ ls $scratch 
+0-date_time.txt  dsdz  end-prog.lst  GEBCO_NA.nc  grid	mean_fields  mean_geosv_yomaha_0.25r_1.00bs.nc	mean_geosv_yomaha_sigma2_0.25r_1.00bs.nc  uv  w  WMO2DAC2type.txt  zeta
+[tcb46@pegasus compute_psi]$ ls
+ARGO_psi.py
+[tcb46@pegasus compute_psi]$ vi ARGO_psi.py
+E576: viminfo: Missing '>' in line: 41
+E576: viminfo: Missing '>' in line: ^I^^I60^I42
+E576: viminfo: Missing '>' in line: ^I.^I69^I0
+E576: viminfo: Missing '>' in line: ^I+^I27^I0
+E576: viminfo: Missing '>' in line: ^I+^I1^I35
+E576: viminfo: Missing '>' in line: ^I+^I122^I38
+E576: viminfo: Missing '>' in line: ^I+^I17^I0
+E576: viminfo: Missing '>' in line: ^I+^I18^I0
+E576: viminfo: Missing '>' in line: ^I+^I19^I0
+E576: viminfo: Missing '>' in line: ^I+^I20^I26
+E136: viminfo: Too many errors, skipping rest of file
+Press ENTER or type command to continue
+        comm.Send(psi1_e4_temp.psi,dest=0,tag=19)
 
 
 
+## Master processor: 
+# (1) Receive data
+# (2) Save streamfunction fields
+else:
+
+        # Initialize final fields
+        psi = np.ones((nranks,psi_temp.lat.shape[0],psi_temp.lon.shape[0],nt))*np.nan
+        psi_e1 = psi.copy()
+        psi_e2 = psi.copy()
+        psi_e3 = psi.copy()
+        psi_e4 = psi.copy()
+
+        # Allocate master processor computation
+        psi[0,:,:,0] = psi_temp.psi.copy()
+        psi[0,:,:,1] = psi1_temp.psi.copy()
+
+        psi_e1[0,:,:,0] = psi_e1_temp.psi.copy()
+        psi_e1[0,:,:,1] = psi1_e1_temp.psi.copy()
+
+        psi_e2[0,:,:,0] = psi_e2_temp.psi.copy()
+        psi_e2[0,:,:,1] = psi1_e2_temp.psi.copy()
+
+        psi_e3[0,:,:,0] = psi_e3_temp.psi.copy()
+        psi_e3[0,:,:,1] = psi1_e3_temp.psi.copy()
+
+        psi_e4[0,:,:,0] = psi_e4_temp.psi.copy()
+        psi_e4[0,:,:,1] = psi1_e4_temp.psi.copy()
+
+        lon = psi_temp.lon.copy()
+        lat = psi_temp.lat.copy()
 
 
 
+        # (1) 
+        for ri in xrange(1,nranks):
+
+                # Re-initialize temporary variables
+                psi_temp = psi_temp.psi.copy()
 
 
+                # Receive data
+                comm.Recv([psi_temp, MPI.DOUBLE], source=ri, tag=10)
+                comm.Recv([psi1_temp, MPI.DOUBLE], source=ri, tag=11)
 
+                comm.Recv([psi_e1_temp, MPI.DOUBLE], source=ri, tag=12)
+                comm.Recv([psi1_e1_temp, MPI.DOUBLE], source=ri, tag=13)
 
+                comm.Recv([psi_e2_temp, MPI.DOUBLE], source=ri, tag=14)
+                comm.Recv([psi1_e2_temp, MPI.DOUBLE], source=ri, tag=15)
 
+                comm.Recv([psi_e3_temp, MPI.DOUBLE], source=ri, tag=16)
+                comm.Recv([psi1_e3_temp, MPI.DOUBLE], source=ri, tag=17)
 
-
-
-
-
+-- INSERT --                                                                                                                                                                                                                329,33-47     98%

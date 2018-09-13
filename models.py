@@ -24,6 +24,22 @@ class load_netcdf(object):
 		data.close()
 
 
+class load_netcdf_var(object):
+	def __init__(self,filename,varnames):
+
+		from netCDF4 import Dataset 
+
+		data = Dataset(filename,'r')
+
+		for i in xrange(len(varnames)):
+
+			exec("self."+varnames[i]+" = data[varnames[i]][:]")
+
+
+		data.close()
+
+
+
 
 ###Primary functions 
 def write_netcdf(filename,varnames,data,title):
